@@ -7,7 +7,7 @@ on:
 jobs:
   gradle_build:
     name: Gradle Build and Unit Tests
-    runs-on: ubuntu-latest-16-cores
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       # write to PR  permission is required for jacocoTestReport Action to update comment
