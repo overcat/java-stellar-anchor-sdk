@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.stellar.anchor.config.AppConfig
+import org.stellar.sdk.Asset
 import org.stellar.sdk.AssetTypeCreditAlphaNum
 import org.stellar.sdk.Server
+import org.stellar.sdk.TrustLineAsset
 import org.stellar.sdk.requests.AccountsRequestBuilder
 import org.stellar.sdk.responses.AccountResponse
 import org.stellar.sdk.responses.AccountResponse.Balance
@@ -89,13 +91,10 @@ internal class HorizonTest {
     every { asset2.code } returns "USDC"
     every { asset2.issuer } returns "issuerAccount2"
 
-    every { balance1.assetType } returns "credit_alphanum4"
-    every { balance1.assetCode } returns asset1.code
-    every { balance1.assetIssuer } returns asset1.issuer
-    every { balance2.assetType } returns "credit_alphanum12"
-    every { balance2.assetCode } returns asset2.code
-    every { balance2.assetIssuer } returns asset2.issuer
-
+    every { balance1.trustLineAsset } returns
+      TrustLineAsset(Asset.createNonNativeAsset(asset1.code, asset1.issuer))
+    every { balance2.trustLineAsset } returns
+      TrustLineAsset(Asset.createNonNativeAsset(asset2.code, asset2.issuer))
     every { accountResponse.balances } returns listOf(balance1, balance2)
 
     val horizon = mockk<Horizon>()
@@ -115,23 +114,24 @@ internal class HorizonTest {
     val balance1: Balance = mockk()
     val balance2: Balance = mockk()
     val balance3: Balance = mockk()
-    val asset1: AssetTypeCreditAlphaNum = mockk()
+    // val asset1: AssetTypeNative = mockk()
     val asset2: AssetTypeCreditAlphaNum = mockk()
     val asset3: AssetTypeCreditAlphaNum = mockk()
     every { server.accounts() } returns accountsRequestBuilder
     every { accountsRequestBuilder.account(account) } returns accountResponse
-    every { balance1.assetType } returns "credit_alphanum8"
-    every { balance1.trustLineAsset.asset } returns asset1
-    every { balance2.assetType } returns "credit_alphanum4"
-    every { balance2.trustLineAsset.asset } returns asset2
-    every { balance3.assetType } returns "credit_alphanum4"
-    every { balance3.trustLineAsset.asset } returns asset3
-    every { asset1.code } returns "USDC"
-    every { asset1.issuer } returns "issuerAccount1"
+
+    // asset 1 is native asset
     every { asset2.code } returns "SRT"
     every { asset2.issuer } returns "issuerAccount1"
     every { asset3.code } returns "USDC"
     every { asset3.issuer } returns "issuerAccount2"
+
+    every { balance1.trustLineAsset } returns TrustLineAsset(Asset.createNativeAsset())
+    every { balance2.trustLineAsset } returns
+      TrustLineAsset(Asset.createNonNativeAsset(asset2.code, asset2.issuer))
+    every { balance3.trustLineAsset } returns
+      TrustLineAsset(Asset.createNonNativeAsset(asset3.code, asset3.issuer))
+
     every { accountResponse.balances } returns listOf(balance1, balance2, balance3)
 
     every { appConfig.horizonUrl } returns TEST_HORIZON_URI
@@ -140,8 +140,6 @@ internal class HorizonTest {
     val horizon = mockk<Horizon>()
     every { horizon.server } returns server
     every { horizon.isTrustlineConfigured(account, asset) } answers { callOriginal() }
-
-    // overcat checking
     assertFalse(horizon.isTrustlineConfigured(account, asset))
   }
 }
