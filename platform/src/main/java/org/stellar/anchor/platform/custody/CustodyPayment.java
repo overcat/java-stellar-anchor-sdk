@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.stellar.anchor.api.exception.SepException;
 import org.stellar.anchor.util.MemoHelper;
-// checked
 import org.stellar.sdk.AssetTypeCreditAlphaNum;
 import org.stellar.sdk.AssetTypeNative;
 import org.stellar.sdk.Memo;

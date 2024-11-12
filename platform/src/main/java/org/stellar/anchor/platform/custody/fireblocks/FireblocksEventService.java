@@ -28,7 +28,6 @@ import org.stellar.anchor.platform.custody.*;
 import org.stellar.anchor.platform.data.JdbcCustodyTransactionRepo;
 import org.stellar.anchor.util.GsonUtils;
 import org.stellar.anchor.util.RSAUtil;
-// checked
 import org.stellar.sdk.responses.operations.OperationResponse;
 import org.stellar.sdk.responses.operations.PathPaymentBaseOperationResponse;
 import org.stellar.sdk.responses.operations.PaymentOperationResponse;

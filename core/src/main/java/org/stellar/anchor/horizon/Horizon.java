@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Getter;
 import org.stellar.anchor.config.AppConfig;
 import org.stellar.anchor.util.AssetHelper;
-// checked
 import org.stellar.sdk.AssetTypeCreditAlphaNum;
 import org.stellar.sdk.Server;
 import org.stellar.sdk.TrustLineAsset;
@@ -56,7 +55,8 @@ public class Horizon {
             });
   }
 
-  public List<OperationResponse> getStellarTxnOperations(String stellarTxnId) throws NetworkException {
+  public List<OperationResponse> getStellarTxnOperations(String stellarTxnId)
+      throws NetworkException {
     return getServer()
         .payments()
         .includeTransactions(true)

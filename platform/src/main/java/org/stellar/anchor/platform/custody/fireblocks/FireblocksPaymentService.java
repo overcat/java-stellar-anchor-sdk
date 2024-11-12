@@ -28,7 +28,6 @@ import org.stellar.anchor.platform.config.FireblocksConfig;
 import org.stellar.anchor.platform.custody.CustodyPaymentService;
 import org.stellar.anchor.platform.data.JdbcCustodyTransaction;
 import org.stellar.anchor.util.GsonUtils;
-// checked
 import org.stellar.sdk.xdr.MemoType;
 
 /** Fireblocks implementation of payment service */

@@ -35,7 +35,6 @@ import org.stellar.anchor.platform.observer.PaymentListener;
 import org.stellar.anchor.platform.utils.DaemonExecutors;
 import org.stellar.anchor.util.ExponentialBackoffTimer;
 import org.stellar.anchor.util.Log;
-// checked
 import org.stellar.sdk.Server;
 import org.stellar.sdk.exception.NetworkException;
 import org.stellar.sdk.requests.EventListener;
@@ -161,8 +160,7 @@ public class StellarPaymentObserver implements HealthCheckable {
                 try {
                   debugF("Dispatching event {}", operationResponse.getId());
                   handleEvent(operationResponse);
-                  metricLatestBlockProcessed.set(
-                      operationResponse.getTransaction().getLedger());
+                  metricLatestBlockProcessed.set(operationResponse.getTransaction().getLedger());
 
                 } catch (TransactionException ex) {
                   errorEx("Error handling events", ex);
@@ -374,8 +372,7 @@ public class StellarPaymentObserver implements HealthCheckable {
         warn(
             String.format(
                 "Payment of id %s contains unsupported memo %s.",
-                operationResponse.getId(),
-                operationResponse.getTransaction().getMemo()));
+                operationResponse.getId(), operationResponse.getTransaction().getMemo()));
       }
       warnEx(ex);
     }

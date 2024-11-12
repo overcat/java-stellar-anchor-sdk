@@ -20,7 +20,6 @@ import org.stellar.anchor.platform.data.JdbcSep31Transaction;
 import org.stellar.anchor.platform.data.JdbcSepTransaction;
 import org.stellar.anchor.platform.observer.ObservedPayment;
 import org.stellar.anchor.util.Log;
-// checked
 import org.stellar.sdk.responses.operations.OperationResponse;
 import org.stellar.sdk.responses.operations.PathPaymentBaseOperationResponse;
 import org.stellar.sdk.responses.operations.PaymentOperationResponse;

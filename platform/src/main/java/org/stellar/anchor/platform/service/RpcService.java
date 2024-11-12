@@ -19,7 +19,6 @@ import org.stellar.anchor.api.rpc.method.RpcMethod;
 import org.stellar.anchor.platform.config.RpcConfig;
 import org.stellar.anchor.platform.rpc.RpcMethodHandler;
 import org.stellar.anchor.platform.utils.RpcUtil;
-// checked
 import org.stellar.sdk.exception.NetworkException;
 
 public class RpcService {

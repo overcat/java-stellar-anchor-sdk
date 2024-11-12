@@ -31,7 +31,6 @@ import org.stellar.anchor.platform.validator.RequestValidator;
 import org.stellar.anchor.sep24.Sep24TransactionStore;
 import org.stellar.anchor.sep31.Sep31TransactionStore;
 import org.stellar.anchor.sep6.Sep6TransactionStore;
-// checked
 import org.stellar.sdk.exception.NetworkException;
 
 public class DoStellarPaymentHandler extends RpcTransactionStatusHandler<DoStellarPaymentRequest> {

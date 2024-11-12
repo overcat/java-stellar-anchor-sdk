@@ -2,7 +2,6 @@ package org.stellar.anchor.platform.job;
 
 import static org.stellar.anchor.util.Log.info;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import org.springframework.scheduling.annotation.Scheduled;

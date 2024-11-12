@@ -49,7 +49,6 @@ import org.stellar.anchor.sep6.Sep6DepositInfoGenerator;
 import org.stellar.anchor.sep6.Sep6TransactionStore;
 import org.stellar.anchor.util.CustodyUtils;
 import org.stellar.anchor.util.Log;
-// checked
 import org.stellar.sdk.Memo;
 
 public class RequestOnchainFundsHandler

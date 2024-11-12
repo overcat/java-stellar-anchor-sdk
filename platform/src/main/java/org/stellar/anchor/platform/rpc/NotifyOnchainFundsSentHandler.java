@@ -10,7 +10,6 @@ import static org.stellar.anchor.platform.utils.PaymentsUtil.addStellarTransacti
 import static org.stellar.anchor.util.Log.errorEx;
 
 import com.google.common.collect.ImmutableSet;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +32,6 @@ import org.stellar.anchor.platform.validator.RequestValidator;
 import org.stellar.anchor.sep24.Sep24TransactionStore;
 import org.stellar.anchor.sep31.Sep31TransactionStore;
 import org.stellar.anchor.sep6.Sep6TransactionStore;
-// checked
 import org.stellar.sdk.exception.NetworkException;
 import org.stellar.sdk.responses.operations.OperationResponse;
 
