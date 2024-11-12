@@ -10,6 +10,7 @@ import org.stellar.sdk.AssetTypeCreditAlphaNum;
 import org.stellar.sdk.Server;
 import org.stellar.sdk.TrustLineAsset;
 import org.stellar.sdk.exception.NetworkException;
+import org.stellar.sdk.requests.PaymentsRequestBuilder;
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
 import org.stellar.sdk.xdr.AssetType;
@@ -55,8 +56,14 @@ public class Horizon {
             });
   }
 
-  public List<OperationResponse> getStellarTxnOperations(String stellarTxnId)
-      throws NetworkException {
+  /**
+   * Get payment operations for a transaction.
+   *
+   * @param stellarTxnId the transaction id
+   * @return the operations
+   * @throws NetworkException request failed, see {@link PaymentsRequestBuilder#execute()}
+   */
+  public List<OperationResponse> getStellarTxnOperations(String stellarTxnId) {
     return getServer()
         .payments()
         .includeTransactions(true)

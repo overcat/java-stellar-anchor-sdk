@@ -116,7 +116,7 @@ public class Sep10Service implements ISep10Service {
   }
 
   public ValidationResponse validateChallenge(ValidationRequest request)
-      throws InvalidSep10ChallengeException, SepValidationException {
+      throws SepValidationException {
     info("Validating SEP-10 challenge.");
 
     ChallengeTransaction challenge = parseChallenge(request);
@@ -178,8 +178,7 @@ public class Sep10Service implements ISep10Service {
     }
   }
 
-  Transaction newChallenge(ChallengeRequest request, String clientSigningKey, Memo memo)
-      throws InvalidSep10ChallengeException {
+  Transaction newChallenge(ChallengeRequest request, String clientSigningKey, Memo memo) {
 
     KeyPair signer = KeyPair.fromSecretSeed(secretConfig.getSep10SigningSeed());
     long now = Instant.now().getEpochSecond();
@@ -390,7 +389,7 @@ public class Sep10Service implements ISep10Service {
 
   void validateChallengeRequest(
       ValidationRequest request, AccountResponse account, String clientDomain)
-      throws InvalidSep10ChallengeException, SepValidationException {
+      throws SepValidationException {
     // fetch the signers from the transaction
     Set<Sep10Challenge.Signer> signers = fetchSigners(account);
     // the signatures must be greater than the medium threshold of the account.
@@ -425,7 +424,7 @@ public class Sep10Service implements ISep10Service {
 
   AccountResponse fetchAccount(
       ValidationRequest request, ChallengeTransaction challenge, String clientDomain)
-      throws InvalidSep10ChallengeException, SepValidationException {
+      throws SepValidationException {
     // Check the client's account
     AccountResponse account;
     try {
@@ -496,8 +495,7 @@ public class Sep10Service implements ISep10Service {
     return clientDomain;
   }
 
-  ChallengeTransaction parseChallenge(ValidationRequest request)
-      throws InvalidSep10ChallengeException, SepValidationException {
+  ChallengeTransaction parseChallenge(ValidationRequest request) throws SepValidationException {
 
     if (request == null || request.getTransaction() == null) {
       throw new SepValidationException("{transaction} is required.");
@@ -609,8 +607,7 @@ class Sep10ChallengeWrapper {
       TimeBounds timebounds,
       String clientDomain,
       String clientSigningKey,
-      Memo memo)
-      throws InvalidSep10ChallengeException {
+      Memo memo) {
     return Sep10Challenge.newChallenge(
         signer,
         network,
@@ -628,8 +625,7 @@ class Sep10ChallengeWrapper {
       String serverAccountId,
       Network network,
       String domainName,
-      String webAuthDomain)
-      throws InvalidSep10ChallengeException {
+      String webAuthDomain) {
     return Sep10Challenge.readChallengeTransaction(
         challengeXdr, serverAccountId, network, domainName, webAuthDomain);
   }
@@ -640,8 +636,7 @@ class Sep10ChallengeWrapper {
       Network network,
       String domainName,
       String webAuthDomain,
-      Set<String> signers)
-      throws InvalidSep10ChallengeException {
+      Set<String> signers) {
     Sep10Challenge.verifyChallengeTransactionSigners(
         challengeXdr, serverAccountId, network, domainName, webAuthDomain, signers);
   }
@@ -653,8 +648,7 @@ class Sep10ChallengeWrapper {
       String domainName,
       String webAuthDomain,
       int threshold,
-      Set<Sep10Challenge.Signer> signers)
-      throws InvalidSep10ChallengeException {
+      Set<Sep10Challenge.Signer> signers) {
     Sep10Challenge.verifyChallengeTransactionThreshold(
         challengeXdr, serverAccountId, network, domainName, webAuthDomain, threshold, signers);
   }
