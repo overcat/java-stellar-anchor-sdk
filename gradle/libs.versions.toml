@@ -5,7 +5,8 @@ assertj = "3.26.0"
 aws-iam-auth = "2.1.1"
 aws-rds = "1.12.759"
 aws-sqs = "1.12.757"
-bcastle = "1.77"
+bcastle = "1.79"
+bcutil = "1.79"
 commons-beanutils = "1.9.4"
 commons-cli = "1.8.0"
 commons-codec = "1.17.0"
@@ -67,6 +68,7 @@ aws-iam-auth = { module = "software.amazon.msk:aws-msk-iam-auth", version.ref = 
 aws-rds = { module = "com.amazonaws:aws-java-sdk-rds", version.ref = "aws-rds" }
 aws-sqs = { module = "com.amazonaws:aws-java-sdk-sqs", version.ref = "aws-sqs" }
 bcastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bcastle" }
+bcutil = { module = "org.bouncycastle:bcutil-jdk18on", version.ref = "bcutil" }
 commons-beanutils = { module = "commons-beanutils:commons-beanutils", version.ref = "commons-beanutils" }
 commons-cli = { module = "commons-cli:commons-cli", version.ref = "commons-cli" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec" }

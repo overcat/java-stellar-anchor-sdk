@@ -83,20 +83,24 @@ internal class HorizonTest {
     every { appConfig.stellarNetworkPassphrase } returns TEST_HORIZON_PASSPHRASE
     every { server.accounts() } returns accountsRequestBuilder
     every { accountsRequestBuilder.account(account) } returns accountResponse
-    every { balance1.assetType } returns "credit_alphanum4"
-    every { balance1.trustLineAsset.asset } returns asset1
-    every { balance2.assetType } returns "credit_alphanum12"
-    every { balance2.trustLineAsset.asset } returns asset2
+
     every { asset1.code } returns "USDC"
     every { asset1.issuer } returns "issuerAccount1"
     every { asset2.code } returns "USDC"
     every { asset2.issuer } returns "issuerAccount2"
+
+    every { balance1.assetType } returns "credit_alphanum4"
+    every { balance1.assetCode } returns asset1.code
+    every { balance1.assetIssuer } returns asset1.issuer
+    every { balance2.assetType } returns "credit_alphanum12"
+    every { balance2.assetCode } returns asset2.code
+    every { balance2.assetIssuer } returns asset2.issuer
+
     every { accountResponse.balances } returns listOf(balance1, balance2)
 
     val horizon = mockk<Horizon>()
     every { horizon.server } returns server
     every { horizon.isTrustlineConfigured(account, asset) } answers { callOriginal() }
-
     assertTrue(horizon.isTrustlineConfigured(account, asset))
   }
 
@@ -137,6 +141,7 @@ internal class HorizonTest {
     every { horizon.server } returns server
     every { horizon.isTrustlineConfigured(account, asset) } answers { callOriginal() }
 
+    // overcat checking
     assertFalse(horizon.isTrustlineConfigured(account, asset))
   }
 }

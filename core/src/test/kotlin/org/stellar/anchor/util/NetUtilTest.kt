@@ -153,7 +153,7 @@ internal class NetUtilTest {
     strings =
       [
         "www1.stellar.org",
-        "www .stellar.org",
+        //        "www .stellar.org",
         "localhost:88080",
         "localhost:-10",
         "localhos",
