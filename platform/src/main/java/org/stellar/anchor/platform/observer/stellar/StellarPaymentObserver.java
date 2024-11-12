@@ -11,7 +11,6 @@ import static org.stellar.anchor.util.ReflectionUtil.getField;
 import static org.stellar.anchor.util.StringHelper.isEmpty;
 
 import com.google.gson.annotations.SerializedName;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -36,7 +35,9 @@ import org.stellar.anchor.platform.observer.PaymentListener;
 import org.stellar.anchor.platform.utils.DaemonExecutors;
 import org.stellar.anchor.util.ExponentialBackoffTimer;
 import org.stellar.anchor.util.Log;
+// checked
 import org.stellar.sdk.Server;
+import org.stellar.sdk.exception.NetworkException;
 import org.stellar.sdk.requests.EventListener;
 import org.stellar.sdk.requests.PaymentsRequestBuilder;
 import org.stellar.sdk.requests.RequestBuilder;
@@ -148,8 +149,8 @@ public class StellarPaymentObserver implements HealthCheckable {
         new EventListener<>() {
           @Override
           public void onEvent(OperationResponse operationResponse) {
-            if (operationResponse.getTransaction().isPresent()) {
-              metricLatestBlockRead.set(operationResponse.getTransaction().get().getLedger());
+            if (operationResponse.getTransaction() != null) {
+              metricLatestBlockRead.set(operationResponse.getTransaction().getLedger());
 
               if (isHealthy()) {
                 debugF("Received event {}", operationResponse.getId());
@@ -161,7 +162,7 @@ public class StellarPaymentObserver implements HealthCheckable {
                   debugF("Dispatching event {}", operationResponse.getId());
                   handleEvent(operationResponse);
                   metricLatestBlockProcessed.set(
-                      operationResponse.getTransaction().get().getLedger());
+                      operationResponse.getTransaction().getLedger());
 
                 } catch (TransactionException ex) {
                   errorEx("Error handling events", ex);
@@ -336,14 +337,14 @@ public class StellarPaymentObserver implements HealthCheckable {
       infoF("Fetching the latest payments records. (limit={})", MIN_RESULTS);
       pageOpResponse =
           server.payments().order(RequestBuilder.Order.DESC).limit(MIN_RESULTS).execute();
-    } catch (IOException e) {
+    } catch (NetworkException e) {
       Log.errorEx("Error fetching the latest /payments result.", e);
       return null;
     }
 
     if (pageOpResponse == null
         || pageOpResponse.getRecords() == null
-        || pageOpResponse.getRecords().size() == 0) {
+        || pageOpResponse.getRecords().isEmpty()) {
       info("No payments found.");
       return null;
     }
@@ -353,7 +354,7 @@ public class StellarPaymentObserver implements HealthCheckable {
   }
 
   void handleEvent(OperationResponse operationResponse) {
-    if (!operationResponse.isTransactionSuccessful()) {
+    if (!operationResponse.getTransactionSuccessful()) {
       savePagingToken(operationResponse.getPagingToken());
       return;
     }
@@ -369,12 +370,12 @@ public class StellarPaymentObserver implements HealthCheckable {
         observedPayment = ObservedPayment.fromPathPaymentOperationResponse(pathPayment);
       }
     } catch (SepException ex) {
-      if (operationResponse.getTransaction().isPresent()) {
+      if (operationResponse.getTransaction() != null) {
         warn(
             String.format(
                 "Payment of id %s contains unsupported memo %s.",
                 operationResponse.getId(),
-                operationResponse.getTransaction().get().getMemo().toString()));
+                operationResponse.getTransaction().getMemo()));
       }
       warnEx(ex);
     }

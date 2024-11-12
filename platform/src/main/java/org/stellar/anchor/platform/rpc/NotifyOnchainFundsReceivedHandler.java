@@ -36,6 +36,8 @@ import org.stellar.anchor.platform.validator.RequestValidator;
 import org.stellar.anchor.sep24.Sep24TransactionStore;
 import org.stellar.anchor.sep31.Sep31TransactionStore;
 import org.stellar.anchor.sep6.Sep6TransactionStore;
+// checked
+import org.stellar.sdk.exception.NetworkException;
 import org.stellar.sdk.responses.operations.OperationResponse;
 
 public class NotifyOnchainFundsReceivedHandler
@@ -164,7 +166,7 @@ public class NotifyOnchainFundsReceivedHandler
         JdbcSep31Transaction txn31 = (JdbcSep31Transaction) txn;
         txn31.setFromAccount(txnOperations.get(0).getSourceAccount());
       }
-    } catch (IOException ex) {
+    } catch (NetworkException ex) {
       errorEx(String.format("Failed to retrieve stellar transaction by ID[%s]", stellarTxnId), ex);
       throw new InternalErrorException(
           String.format("Failed to retrieve Stellar transaction by ID[%s]", stellarTxnId), ex);

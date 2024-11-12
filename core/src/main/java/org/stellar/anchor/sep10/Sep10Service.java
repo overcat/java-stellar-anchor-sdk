@@ -11,7 +11,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -117,7 +116,7 @@ public class Sep10Service implements ISep10Service {
   }
 
   public ValidationResponse validateChallenge(ValidationRequest request)
-      throws IOException, InvalidSep10ChallengeException, SepValidationException {
+      throws InvalidSep10ChallengeException, SepValidationException {
     info("Validating SEP-10 challenge.");
 
     ChallengeTransaction challenge = parseChallenge(request);
@@ -391,7 +390,7 @@ public class Sep10Service implements ISep10Service {
 
   void validateChallengeRequest(
       ValidationRequest request, AccountResponse account, String clientDomain)
-      throws InvalidSep10ChallengeException, IOException, SepValidationException {
+      throws InvalidSep10ChallengeException, SepValidationException {
     // fetch the signers from the transaction
     Set<Sep10Challenge.Signer> signers = fetchSigners(account);
     // the signatures must be greater than the medium threshold of the account.
@@ -426,7 +425,7 @@ public class Sep10Service implements ISep10Service {
 
   AccountResponse fetchAccount(
       ValidationRequest request, ChallengeTransaction challenge, String clientDomain)
-      throws InvalidSep10ChallengeException, IOException, SepValidationException {
+      throws InvalidSep10ChallengeException, SepValidationException {
     // Check the client's account
     AccountResponse account;
     try {
@@ -498,7 +497,7 @@ public class Sep10Service implements ISep10Service {
   }
 
   ChallengeTransaction parseChallenge(ValidationRequest request)
-      throws IOException, InvalidSep10ChallengeException, SepValidationException {
+      throws InvalidSep10ChallengeException, SepValidationException {
 
     if (request == null || request.getTransaction() == null) {
       throw new SepValidationException("{transaction} is required.");
@@ -557,12 +556,17 @@ public class Sep10Service implements ISep10Service {
    * @param network The network to connect to for verifying and retrieving.
    * @return The extracted home domain from the Manage Data operation within the SEP-10 challenge
    *     transaction.
-   * @throws IOException If read XDR string fails, the exception will be thrown.
    * @throws SepValidationException If the transaction is not a valid SEP-10 challenge transaction.
    */
   String extractHomeDomainFromChallengeXdr(String challengeXdr, Network network)
-      throws IOException, SepValidationException {
-    AbstractTransaction parsed = Transaction.fromEnvelopeXdr(challengeXdr, network);
+      throws SepValidationException {
+    AbstractTransaction parsed;
+    try {
+      parsed = Transaction.fromEnvelopeXdr(challengeXdr, network);
+    } catch (IllegalArgumentException e) {
+      throw new SepValidationException("Invalid challenge transaction.");
+    }
+
     if (!(parsed instanceof Transaction)) {
       throw new SepValidationException("Transaction cannot be a fee bump transaction");
     }
@@ -625,7 +629,7 @@ class Sep10ChallengeWrapper {
       Network network,
       String domainName,
       String webAuthDomain)
-      throws InvalidSep10ChallengeException, IOException {
+      throws InvalidSep10ChallengeException {
     return Sep10Challenge.readChallengeTransaction(
         challengeXdr, serverAccountId, network, domainName, webAuthDomain);
   }
@@ -637,7 +641,7 @@ class Sep10ChallengeWrapper {
       String domainName,
       String webAuthDomain,
       Set<String> signers)
-      throws InvalidSep10ChallengeException, IOException {
+      throws InvalidSep10ChallengeException {
     Sep10Challenge.verifyChallengeTransactionSigners(
         challengeXdr, serverAccountId, network, domainName, webAuthDomain, signers);
   }
@@ -650,7 +654,7 @@ class Sep10ChallengeWrapper {
       String webAuthDomain,
       int threshold,
       Set<Sep10Challenge.Signer> signers)
-      throws InvalidSep10ChallengeException, IOException {
+      throws InvalidSep10ChallengeException {
     Sep10Challenge.verifyChallengeTransactionThreshold(
         challengeXdr, serverAccountId, network, domainName, webAuthDomain, threshold, signers);
   }

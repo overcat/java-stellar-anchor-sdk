@@ -69,6 +69,7 @@ import org.stellar.anchor.util.Log;
 import org.stellar.anchor.util.SepHelper;
 import org.stellar.anchor.util.StringHelper;
 import org.stellar.anchor.util.TransactionsParams;
+// checked
 import org.stellar.sdk.Memo;
 
 public class TransactionService {

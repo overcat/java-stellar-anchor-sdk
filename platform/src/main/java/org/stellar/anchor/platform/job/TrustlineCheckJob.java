@@ -13,6 +13,7 @@ import org.stellar.anchor.platform.config.PropertyCustodyConfig;
 import org.stellar.anchor.platform.data.JdbcTransactionPendingTrust;
 import org.stellar.anchor.platform.data.JdbcTransactionPendingTrustRepo;
 import org.stellar.anchor.platform.rpc.NotifyTrustSetHandler;
+import org.stellar.sdk.exception.NetworkException;
 
 public class TrustlineCheckJob {
 
@@ -50,7 +51,7 @@ public class TrustlineCheckJob {
         boolean trustlineConfigured;
         try {
           trustlineConfigured = horizon.isTrustlineConfigured(t.getAccount(), t.getAsset());
-        } catch (IOException ex) {
+        } catch (NetworkException ex) {
           trustlineConfigured = false;
         }
 

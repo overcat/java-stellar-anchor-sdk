@@ -22,6 +22,7 @@ import org.stellar.anchor.platform.observer.PaymentListener;
 import org.stellar.anchor.util.AssetHelper;
 import org.stellar.anchor.util.Log;
 import org.stellar.anchor.util.MemoHelper;
+// checked
 import org.stellar.sdk.xdr.MemoType;
 
 public class PaymentOperationToEventListener implements PaymentListener {

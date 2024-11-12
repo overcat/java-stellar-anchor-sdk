@@ -2,7 +2,6 @@ package org.stellar.anchor.horizon
 
 import io.mockk.every
 import io.mockk.mockk
-import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -84,15 +83,15 @@ internal class HorizonTest {
     every { appConfig.stellarNetworkPassphrase } returns TEST_HORIZON_PASSPHRASE
     every { server.accounts() } returns accountsRequestBuilder
     every { accountsRequestBuilder.account(account) } returns accountResponse
-    every { balance1.getAssetType() } returns "credit_alphanum4"
-    every { balance1.getAsset() } returns Optional.of(asset1)
-    every { balance2.getAssetType() } returns "credit_alphanum12"
-    every { balance2.getAsset() } returns Optional.of(asset2)
-    every { asset1.getCode() } returns "USDC"
-    every { asset1.getIssuer() } returns "issuerAccount1"
-    every { asset2.getCode() } returns "USDC"
-    every { asset2.getIssuer() } returns "issuerAccount2"
-    every { accountResponse.getBalances() } returns arrayOf(balance1, balance2)
+    every { balance1.assetType } returns "credit_alphanum4"
+    every { balance1.trustLineAsset.asset } returns asset1
+    every { balance2.assetType } returns "credit_alphanum12"
+    every { balance2.trustLineAsset.asset } returns asset2
+    every { asset1.code } returns "USDC"
+    every { asset1.issuer } returns "issuerAccount1"
+    every { asset2.code } returns "USDC"
+    every { asset2.issuer } returns "issuerAccount2"
+    every { accountResponse.balances } returns listOf(balance1, balance2)
 
     val horizon = mockk<Horizon>()
     every { horizon.server } returns server
@@ -117,19 +116,19 @@ internal class HorizonTest {
     val asset3: AssetTypeCreditAlphaNum = mockk()
     every { server.accounts() } returns accountsRequestBuilder
     every { accountsRequestBuilder.account(account) } returns accountResponse
-    every { balance1.getAssetType() } returns "credit_alphanum8"
-    every { balance1.getAsset() } returns Optional.of(asset1)
-    every { balance2.getAssetType() } returns "credit_alphanum4"
-    every { balance2.getAsset() } returns Optional.of(asset2)
-    every { balance3.getAssetType() } returns "credit_alphanum4"
-    every { balance3.getAsset() } returns Optional.of(asset3)
-    every { asset1.getCode() } returns "USDC"
-    every { asset1.getIssuer() } returns "issuerAccount1"
-    every { asset2.getCode() } returns "SRT"
-    every { asset2.getIssuer() } returns "issuerAccount1"
-    every { asset3.getCode() } returns "USDC"
-    every { asset3.getIssuer() } returns "issuerAccount2"
-    every { accountResponse.getBalances() } returns arrayOf(balance1, balance2, balance3)
+    every { balance1.assetType } returns "credit_alphanum8"
+    every { balance1.trustLineAsset.asset } returns asset1
+    every { balance2.assetType } returns "credit_alphanum4"
+    every { balance2.trustLineAsset.asset } returns asset2
+    every { balance3.assetType } returns "credit_alphanum4"
+    every { balance3.trustLineAsset.asset } returns asset3
+    every { asset1.code } returns "USDC"
+    every { asset1.issuer } returns "issuerAccount1"
+    every { asset2.code } returns "SRT"
+    every { asset2.issuer } returns "issuerAccount1"
+    every { asset3.code } returns "USDC"
+    every { asset3.issuer } returns "issuerAccount2"
+    every { accountResponse.balances } returns listOf(balance1, balance2, balance3)
 
     every { appConfig.horizonUrl } returns TEST_HORIZON_URI
     every { appConfig.stellarNetworkPassphrase } returns TEST_HORIZON_PASSPHRASE
